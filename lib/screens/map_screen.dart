@@ -1,218 +1,228 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_controller/google_maps_controller.dart';
-import 'add_new_prospect_screen.dart';
+import 'package:mu_shop/providers/prospects.dart';
+import 'package:mu_shop/widgets/prospect_map.screen.dart';
+import 'package:mu_shop/widgets/user_map.dart';
+import 'package:provider/provider.dart';
+
+const LatLng SOURCE_LOCATION = LatLng(5.345317, -4.024429);
+const LatLng DEST_LOCATION = LatLng(5.335317, -4.044429);
+const double CAMERA_ZOOM = 16;
+const double CAMERA_TILT = 80;
+const double CAMERA_BEARING = 30;
+const double PIN_VISIBLE_POSITION = 20;
+const double PIN_INVISIBLE_POSITION = -220;
+bool userBadgeSelected = false;
 
 class MapScreen extends StatefulWidget {
+  // final String name;
+  final String cardNumber;
+
+  // final String imageUrl;
+  // final String email;
+  // final String contact;
+  // final double longitude;
+  // final double latitude;
+
+  MapScreen(
+      {
+      // required this.name,
+      // required this.imageUrl,
+      // required this.email,
+      // required this.contact,
+      // required this.longitude,
+      // required this.latitude,
+      required this.cardNumber});
+      
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  static const _initialCameraPosition = CameraPosition(
-    target: LatLng(37.773972, -122.431297),
-    zoom: 11.5,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
-  static const _position = CameraPosition(
-    target: LatLng(37.773972, -122.431297),
-    zoom: 11.5,
-  );
-
-  static const _originPosition = CameraPosition(
-    target: LatLng(37.773972, -122.431297),
-    zoom: 11.5,
-  );
-
-  // static final _destnPosition =
-  //     CameraPosition(target: _origin.position, zoom: 14.5, tilt: 500);
+  double pinPillPosition = PIN_VISIBLE_POSITION;
   Completer<GoogleMapController> _googleMapController = Completer();
 
-  Marker _origin = Marker(markerId: MarkerId('a'));
-  Marker _destination = Marker(markerId: MarkerId('a'));
+  Set<Marker> _markers = Set<Marker>();
+  LatLng currentLocation = LatLng(5.345317, -4.024429);
+  LatLng destinationLocation = LatLng(5.335317, -4.044429);
 
-  void getLocation() async {
-    // LocationPermission permission = await Geolocator.checkPermission();
+  Set<Polyline> _polylines = Set<Polyline>();
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+
+  LatLng coordonees = LatLng(0, 0);
+
+  void setInitialLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.low);
-    print(position.latitude);
-    print(position);
+        desiredAccuracy: LocationAccuracy.high);
+    coordonees = LatLng(position.latitude, position.longitude);
+    currentLocation = LatLng(position.latitude, position.longitude);
+    destinationLocation =
+        LatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude);
   }
 
   @override
   void initState() {
-    getLocation();
+    polylinePoints = PolylinePoints();
+    this.setInitialLocation();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+  
+
+    CameraPosition initialCameraPosition = CameraPosition(
+        zoom: CAMERA_ZOOM,
+        tilt: CAMERA_TILT,
+        bearing: CAMERA_BEARING,
+        target: LatLng(coordonees.latitude, coordonees.longitude));
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        centerTitle: false,
-        title: const Text('Map Screen'),
-        actions: [
-          if (_origin.markerId != MarkerId(''))
-            TextButton(
-              onPressed: _goToInitialCameraPosition,
-              // () => _googleMapController.animateCamera(
-              //   CameraUpdate.newCameraPosition(
-              //     CameraPosition(
-              //         target: _origin.position, zoom: 14.5, tilt: 500),
-              //   ),
-              // ),
-              style: TextButton.styleFrom(
-                  primary: Colors.green,
-                  textStyle: const TextStyle(fontWeight: FontWeight.w600)),
-              child: const Text(
-                'ORIGIN',
-                style: TextStyle(color: Colors.white),
-              ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: GoogleMap(
+              myLocationEnabled: true,
+              // mapType: MapType.normal,
+              compassEnabled: false,
+              polylines: _polylines,
+              tiltGesturesEnabled: false,
+              myLocationButtonEnabled: false,
+              zoomControlsEnabled: false,
+              initialCameraPosition: initialCameraPosition,
+              onMapCreated: (GoogleMapController controller) {
+                _googleMapController.complete(controller);
+                showPinsOnMap();
+                setPolylines();
+              },
+              onTap: (LatLng loc) {
+                setState(
+                  () {
+                    this.pinPillPosition = PIN_INVISIBLE_POSITION;
+                    userBadgeSelected = false;
+                  },
+                );
+              },
+              markers: _markers,
             ),
-          if (_origin.markerId != MarkerId(''))
-            TextButton(
-              onPressed: _goToInitialCameraPosition,
-              // () => _googleMapController.animateCamera(
-              //   CameraUpdate.newCameraPosition(
-              //     CameraPosition(
-              //         target: _origin.position, zoom: 14.5, tilt: 500),
-              //   ),),
-
-              style: TextButton.styleFrom(
-                  primary: Colors.green,
-                  textStyle: const TextStyle(fontWeight: FontWeight.w600)),
-              child: const Text(
-                'DEST',
-                style: TextStyle(color: Colors.white),
-              ),
+          ),
+          Positioned(
+            top: 60,
+            left: 0,
+            right: 0,
+            child: UserMap(userBadgeSelected),
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            right: 0,
+            left: 0,
+            bottom: 10,
+            child: ProspectMap(
+              cardNumber: widget.cardNumber,
             ),
+            //ProspectMap(name: name, email: , contact: con, imageUrl: ,),
+          ),
         ],
-      ),
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
-        initialCameraPosition: _initialCameraPosition,
-        onMapCreated: (GoogleMapController controller) =>
-            _googleMapController.complete(controller),
-        markers: {
-          if (_origin.position != const LatLng(0.0, 0.0)) _origin,
-          if (_destination.position != const LatLng(0.0, 0.0)) _destination,
-        },
-        onLongPress: _addMarker,
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-        onPressed: _goToInitialCameraPosition,
-        // _googleMapController.animateCamera(
-        //   CameraUpdate.newCameraPosition(_initialCameraPosition),
-
-        child: const Icon(Icons.center_focus_strong),
       ),
     );
   }
 
-  void _addMarker(LatLng pos) {
-    if (_origin.position == const LatLng(0.0, 0.0) ||
-        (_origin.position != const LatLng(0.0, 0.0) &&
-            _destination.position != const LatLng(0.0, 0.0))) {
-      // if (_origin.markerId == MarkerId('') ||
-      //     (_origin.markerId != MarkerId('') &&
-      //         _destination.markerId != MarkerId(''))) {
-      setState(
-        () {
-          _origin = Marker(
-            markerId: const MarkerId('Origin'),
-            infoWindow: const InfoWindow(title: 'Origin'),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-            position: pos,
+  void setPolylines() async {
+    //PolylineResult result =
+    await polylinePoints
+        .getRouteBetweenCoordinates(
+      'AIzaSyAsUETIm-SkE_k9qiw7H7A4YQXGbG0iBXU',
+      PointLatLng(SOURCE_LOCATION.latitude, SOURCE_LOCATION.longitude),
+      PointLatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude),
+      travelMode: TravelMode.driving,
+    )
+        .then((value) {
+      value.points.forEach(
+        (PointLatLng point) {
+          polylineCoordinates.add(
+            LatLng(point.latitude, point.longitude),
           );
-          //  _destination.position = const LatLng(0.0, 0.0);
-          //   _destination.markerId = MarkerId('');
         },
       );
-    } else {
+    }).then((value) {
+      _polylines.add(
+        Polyline(
+            visible: true,
+            polylineId: PolylineId('PolyLine'),
+            width: 10,
+            color: Colors.red,
+            points: polylineCoordinates),
+      );
       setState(
-        () {
-          _origin = Marker(
-            markerId: const MarkerId('Destination'),
-            infoWindow: const InfoWindow(title: 'Destinaion'),
+        () {},
+      );
+    });
+
+    // print('Les résulatats sont ${result.status}');
+
+    // if (result.points.isNotEmpty) {
+    //   result.points.forEach(
+    //     (PointLatLng point) {
+    //       polylineCoordinates.add(
+    //         LatLng(point.latitude, point.longitude),
+    //       );
+    //     },
+    //   );
+    //    _polylines.add(
+    //         Polyline(
+    //             visible: true,
+    //             polylineId: PolylineId('PolyLine'),
+    //             width: 10,
+    //             color: Colors.red,
+    //             points: polylineCoordinates),
+    //       );
+    //   setState(
+    //     () {
+
+    //     },
+    //   );
+    // }
+  }
+
+  void showPinsOnMap() {
+    setState(
+      () {
+        _markers.add(
+          Marker(
+            markerId: MarkerId('SourcePin'),
+            position: currentLocation,
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueGreen),
+            onTap: () {
+              setState(
+                () {
+                  userBadgeSelected = true;
+                },
+              );
+            },
+          ),
+        );
+        _markers.add(
+          Marker(
+            markerId: MarkerId('DestinationPin'),
+            position: destinationLocation,
             icon:
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-            position: pos,
-          );
-        },
-      );
-    }
-  }
-
-  Future<void> _goToInitialCameraPosition() async {
-    final GoogleMapController controller = await _googleMapController.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_position));
-  }
-
-  Future<void> _originCameraPostion() async {
-    final GoogleMapController controller = await _googleMapController.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_position));
+            onTap: () {
+              setState(
+                () {
+                  this.pinPillPosition = PIN_VISIBLE_POSITION;
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
-
-// }
-// import 'dart:async';
-
-// import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-// class MapScreen extends StatefulWidget {
-//   @override
-//   State<MapScreen> createState() => MapScreenState();
-// }
-
-// class MapScreenState extends State<MapScreen> {
-//   Completer<GoogleMapController> _controller = Completer();
-
-//   static final CameraPosition _kGooglePlex = CameraPosition(
-//     target: LatLng(37.42796133580664, -122.085749655962),
-//     zoom: 14.4746,
-//   );
-
-//   static final CameraPosition _kLake = CameraPosition(
-//       bearing: 192.8334901395799,
-//       target: LatLng(37.43296265331129, -122.08832357078792),
-//       tilt: 59.440717697143555,
-//       zoom: 19.151926040649414);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return new Scaffold(
-//       body: GoogleMap(
-//         mapType: MapType.hybrid,
-//         initialCameraPosition: _kGooglePlex,
-//         onMapCreated: (GoogleMapController controller) {
-//           _controller.complete(controller);
-//         },
-//       ),
-//       floatingActionButton: FloatingActionButton.extended(
-//         onPressed: _goToTheLake,
-//         label: Text('To the lake!'),
-//         icon: Icon(Icons.directions_boat),
-//       ),
-//     );
-//   }
-
-//   Future<void> _goToTheLake() async {
-//     final GoogleMapController controller = await _controller.future;
-//     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-//   }
-// }

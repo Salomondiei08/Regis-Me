@@ -64,6 +64,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.3"
+  dots_indicator:
+    dependency: transitive
+    description:
+      name: dots_indicator
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -85,6 +92,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.1.1"
+  floating_search_bar:
+    dependency: "direct main"
+    description:
+      name: floating_search_bar
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -101,6 +115,13 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_polyline_points
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
+  flutter_staggered_animations:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_animations
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
@@ -142,13 +163,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
-  google_maps_controller:
-    dependency: "direct main"
-    description:
-      name: google_maps_controller
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.2.0"
   google_maps_flutter:
     dependency: "direct main"
     description:
@@ -177,6 +191,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.0"
+  introduction_screen:
+    dependency: "direct main"
+    description:
+      name: introduction_screen
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.0"
   js:
     dependency: transitive
     description:

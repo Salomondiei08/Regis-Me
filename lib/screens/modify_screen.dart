@@ -21,7 +21,7 @@ class ModifyScreen extends StatelessWidget {
           itemBuilder: (_, i) => Column(
             children: [
               UserProspectItem(
-                  prospectsData.items[i].name, prospectsData.items[i].imageUrl),
+                  prospectsData.items[i].name, prospectsData.items[i].imageUrl, prospectsData.items[i].cardNumber,),
               Divider()
             ],
           ),

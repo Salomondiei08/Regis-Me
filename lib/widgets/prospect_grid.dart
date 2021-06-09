@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:mu_shop/providers/prospect.dart';
 import 'package:provider/provider.dart';
 import '../providers/prospects.dart';
 import 'package:mu_shop/widgets/prospect_item.dart';

@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mu_shop/providers/prospect.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mu_shop/providers/prospects.dart';
-import 'package:mu_shop/screens/prospect_detail_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'navigation.dart';
-
-class AddNewProspect extends StatefulWidget {
-  static const routeName = '/add-new-prospects';
+class EditNewProspect extends StatefulWidget {
+  static const routeName = '/edit-new-prospects';
 
   @override
-  _AddNewProspectState createState() => _AddNewProspectState();
+  _EditNewProspectState createState() => _EditNewProspectState();
 }
 
-class _AddNewProspectState extends State<AddNewProspect> {
+class _EditNewProspectState extends State<EditNewProspect> {
   final _nameFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _contactFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
+
+  var _initValues = {
+    "cardNumber": "",
+    "name": "",
+    "contact": "",
+    "email": "",
+    "imageUrl": "",
+    'longitude': "",
+    'latitude': "",
+  };
   var _editedProspect = Prospect(
     cardNumber: '',
     name: '',
@@ -31,20 +37,31 @@ class _AddNewProspectState extends State<AddNewProspect> {
     latitude: 0,
     longitude: 0,
   );
+
+  // var _isInit = true;
+  // @override
+  // void didChangeDependencies() {
+  //   // if (_isInit) {
+
+  // _isInit = false;
+
+  // super.didChangeDependencies();
+  // }
+  // }
+
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
   }
 
-  void _saveForm() {
+  void _update() {
     final isValid = _form.currentState!.validate();
     if (isValid) {
       _form.currentState!.save();
       Provider.of<Prospects>(context, listen: false)
-          .addProspect(_editedProspect);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Navigation()));
+          .updateProspect(_editedProspect.cardNumber, _editedProspect);
+      Navigator.of(context).pop();
     }
     return;
   }
@@ -58,17 +75,12 @@ class _AddNewProspectState extends State<AddNewProspect> {
     setState(() {});
   }
 
-  LatLng coordonees = LatLng(0, 0);
-
   void getLocation() async {
     // LocationPermission permission = await Geolocator.checkPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
-
-    setState(() {
-      coordonees = LatLng(position.latitude, position.longitude);
-      print(coordonees);
-    });
+    print(position.latitude);
+    print(position);
 
     _editedProspect = Prospect(
       cardNumber: _editedProspect.cardNumber,
@@ -93,10 +105,27 @@ class _AddNewProspectState extends State<AddNewProspect> {
 
   @override
   Widget build(BuildContext context) {
+    final prospectCardNumber =
+        ModalRoute.of(context)!.settings.arguments as String;
+
+    _editedProspect = Provider.of<Prospects>(context, listen: false)
+        .findByCardNumber(prospectCardNumber);
+    _initValues = {
+      "cardNumber": _editedProspect.cardNumber,
+      "name": _editedProspect.name,
+      "contact": _editedProspect.contact,
+      "email": _editedProspect.email,
+      //  "imageUrl": _editedProspect.imageUrl,
+      'image': '',
+      "latitude": _editedProspect.latitude.toString(),
+      "longitude": _editedProspect.longitude.toString(),
+    };
+    _imageUrlController.text = _editedProspect.imageUrl;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add a new a Client'),
-        actions: [IconButton(onPressed: _saveForm, icon: Icon(Icons.save))],
+        title: Text('Edit a Client'),
+        actions: [IconButton(onPressed: _update, icon: Icon(Icons.save))],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -105,6 +134,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _initValues['cardNumber'],
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please provide a CNI Number';
@@ -130,6 +160,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                 },
               ),
               TextFormField(
+                initialValue: _initValues['name'],
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please provide the name of the company';
@@ -156,6 +187,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                 },
               ),
               TextFormField(
+                  initialValue: _initValues['email'],
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please provide the email of the company';
@@ -181,6 +213,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                     );
                   }),
               TextFormField(
+                initialValue: _initValues['contact'],
                 validator: (value) {
                   // ignore: unnecessary_null_comparison
                   if (value!.isEmpty == null) {
@@ -248,7 +281,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                       controller: _imageUrlController,
                       focusNode: _imageUrlFocusNode,
                       // onFieldSubmitted: (_) {
-                      //   _saveForm();
+                      //   _update();
                       // },
                       onSaved: (value) {
                         _editedProspect = Prospect(
@@ -272,7 +305,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                 children: [
                   Expanded(
                     child: TextFormField(
-                      initialValue: (coordonees.longitude).toString(),
+                      initialValue: _initValues['longitude'],
 
                       validator: (value) {
                         if (double.tryParse(value!) == null) {
@@ -289,7 +322,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                       // controller: _imageUrlController,
                       // focusNode: _imageUrlFocusNode,
                       // onFieldSubmitted: (_) {
-                      //   _saveForm();
+                      //   _update();
                       // },
                       onSaved: (value) {
                         _editedProspect = Prospect(
@@ -309,7 +342,8 @@ class _AddNewProspectState extends State<AddNewProspect> {
                   ),
                   Expanded(
                     child: TextFormField(
-                      initialValue: (coordonees.latitude).toString(),
+                      initialValue: _initValues['latitude'],
+
                       validator: (value) {
                         if (double.tryParse(value!) == null) {
                           return 'Please provide a valid number';
@@ -325,7 +359,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                       // controller: _imageUrlController,
                       // focusNode: _imageUrlFocusNode,
                       // onFieldSubmitted: (_) {
-                      //   _saveForm();
+                      //   _update();
                       // },
                       onSaved: (value) {
                         _editedProspect = Prospect(
@@ -362,9 +396,7 @@ class _AddNewProspectState extends State<AddNewProspect> {
                     ],
                   ),
                   onPressed: () {
-                    setState(() {
-                      getLocation();
-                    });
+                    getLocation();
                   },
                 ),
               ),

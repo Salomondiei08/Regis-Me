@@ -15,7 +15,6 @@ class Prospect with ChangeNotifier {
   final String imageUrl;
   final double longitude;
   final double latitude;
-  final TYPE type;
   bool isFavorite;
 
   Prospect( 
@@ -26,7 +25,6 @@ class Prospect with ChangeNotifier {
       required this.imageUrl,
       required this.longitude,
       required this.latitude,
-      required this.type,
       this.isFavorite = false});
 
   void toggleFavoriteStatus() {

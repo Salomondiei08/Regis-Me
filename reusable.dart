@@ -1,187 +1,476 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_controller/google_maps_controller.dart';
+// // import 'package:flutter/material.dart';
+// // import 'dart:async';
+// // import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapScreen extends StatefulWidget {
-  @override
-  _MapScreenState createState() => _MapScreenState();
-}
 
-class _MapScreenState extends State<MapScreen> {
-  static const _initialCameraPosition = CameraPosition(
-    target: LatLng(37.773972, -122.431297),
-    zoom: 11.5,
-  );
+// // class MapScreen extends StatefulWidget {
+// //   @override
+// //   _MapScreenState createState() => _MapScreenState();
+// // }
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+// // class _MapScreenState extends State<MapScreen> {
+// //   static const _initialCameraPosition = CameraPosition(
+// //     target: LatLng(37.773972, -122.431297),
+// //     zoom: 11.5,
+// //   );
 
-  static const _position = CameraPosition(
-    target: LatLng(37.773972, -122.431297),
-    zoom: 11.5,
-  );
-  // Completer<GoogleMapController>
-  Completer<GoogleMapController> _googleMapController = Completer();
-  // var _googleMapController = GoogleMapsController();
+// //   static final CameraPosition _kLake = CameraPosition(
+// //       bearing: 192.8334901395799,
+// //       target: LatLng(37.43296265331129, -122.08832357078792),
+// //       tilt: 59.440717697143555,
+// //       zoom: 19.151926040649414);
 
-  Marker _origin = Marker(markerId: MarkerId(''));
-  Marker _destination = Marker(markerId: MarkerId(''));
-  @override
-  // void dispose() {
-  //   _googleMapController.dispose();
-  //   super.dispose();
-  // }
+// //   static const _position = CameraPosition(
+// //     target: LatLng(37.773972, -122.431297),
+// //     zoom: 11.5,
+// //   );
+// //   // Completer<GoogleMapController>
+// //   Completer<GoogleMapController> _googleMapController = Completer();
+// //   // var _googleMapController = GoogleMapsController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.green,
-        centerTitle: false,
-        title: const Text('Map Screen'),
-        actions: [
-          //     if (_origin != null)
-          TextButton(
-            onPressed: _goToInitialCameraPosition,
-            // () => _googleMapController.animateCamera(
-            //   CameraUpdate.newCameraPosition(
-            //     CameraPosition(
-            //         target: _origin.position, zoom: 14.5, tilt: 500),
-            //   ),
-            // ),
-            style: TextButton.styleFrom(
-                primary: Colors.green,
-                textStyle: const TextStyle(fontWeight: FontWeight.w600)),
-            child: const Text(
-              'ORIGIN',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          //   if (_origin != null)
-          TextButton(
-            onPressed: _goToInitialCameraPosition,
-            // () => _googleMapController.animateCamera(
-            //   CameraUpdate.newCameraPosition(
-            //     CameraPosition(
-            //         target: _origin.position, zoom: 14.5, tilt: 500),
-            //   ),),
+// //   Marker _origin = Marker(markerId: MarkerId(''));
+// //   Marker _destination = Marker(markerId: MarkerId(''));
+// //   @override
+// //   // void dispose() {
+// //   //   _googleMapController.dispose();
+// //   //   super.dispose();
+// //   // }
 
-            style: TextButton.styleFrom(
-                primary: Colors.green,
-                textStyle: const TextStyle(fontWeight: FontWeight.w600)),
-            child: const Text(
-              'DEST',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
-        initialCameraPosition: _initialCameraPosition,
-        onMapCreated: (GoogleMapController controller) =>
-            _googleMapController.complete(controller),
-        markers: {
-          _origin, _destination,
-          // if (_origin != null) _origin,
-          // if (_destination != null) _destination,
-        },
-        onLongPress: _addMarker,
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-        onPressed: _goToInitialCameraPosition,
-        // _googleMapController.animateCamera(
-        //   CameraUpdate.newCameraPosition(_initialCameraPosition),
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       appBar: AppBar(
+// //         backgroundColor: Colors.green,
+// //         centerTitle: false,
+// //         title: const Text('Map Screen'),
+// //         actions: [
+// //           //     if (_origin != null)
+// //           TextButton(
+// //             onPressed: _goToInitialCameraPosition,
+// //             // () => _googleMapController.animateCamera(
+// //             //   CameraUpdate.newCameraPosition(
+// //             //     CameraPosition(
+// //             //         target: _origin.position, zoom: 14.5, tilt: 500),
+// //             //   ),
+// //             // ),
+// //             style: TextButton.styleFrom(
+// //                 primary: Colors.green,
+// //                 textStyle: const TextStyle(fontWeight: FontWeight.w600)),
+// //             child: const Text(
+// //               'ORIGIN',
+// //               style: TextStyle(color: Colors.white),
+// //             ),
+// //           ),
+// //           //   if (_origin != null)
+// //           TextButton(
+// //             onPressed: _goToInitialCameraPosition,
+// //             // () => _googleMapController.animateCamera(
+// //             //   CameraUpdate.newCameraPosition(
+// //             //     CameraPosition(
+// //             //         target: _origin.position, zoom: 14.5, tilt: 500),
+// //             //   ),),
 
-        child: const Icon(Icons.center_focus_strong),
-      ),
-    );
-  }
+// //             style: TextButton.styleFrom(
+// //                 primary: Colors.green,
+// //                 textStyle: const TextStyle(fontWeight: FontWeight.w600)),
+// //             child: const Text(
+// //               'DEST',
+// //               style: TextStyle(color: Colors.white),
+// //             ),
+// //           ),
+// //         ],
+// //       ),
+// //       body: GoogleMap(
+// //         mapType: MapType.hybrid,
+// //         myLocationButtonEnabled: false,
+// //         zoomControlsEnabled: false,
+// //         initialCameraPosition: _initialCameraPosition,
+// //         onMapCreated: (GoogleMapController controller) =>
+// //             _googleMapController.complete(controller),
+// //         markers: {
+// //           _origin, _destination,
+// //           // if (_origin != null) _origin,
+// //           // if (_destination != null) _destination,
+// //         },
+// //         onLongPress: _addMarker,
+// //       ),
+// //       floatingActionButton: FloatingActionButton(
+// //         backgroundColor: Colors.green,
+// //         foregroundColor: Colors.white,
+// //         onPressed: _goToInitialCameraPosition,
+// //         // _googleMapController.animateCamera(
+// //         //   CameraUpdate.newCameraPosition(_initialCameraPosition),
 
-  void _addMarker(LatLng pos) {
-    //  if (_origin == null || (_origin != null && _destination != null)) {
-    setState(
-      () {
-        _origin = Marker(
-          markerId: const MarkerId('Origin'),
-          infoWindow: const InfoWindow(title: 'Origin'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          position: pos,
-        );
-        //  _destination = null;
-      },
-    );
-    // } else {
-    setState(
-      () {
-        _origin = Marker(
-          markerId: const MarkerId('Destination'),
-          infoWindow: const InfoWindow(title: 'Destinaion'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          position: pos,
-        );
-      },
-    );
-  }
+// //         child: const Icon(Icons.center_focus_strong),
+// //       ),
+// //     );
+// //   }
 
-  Future<void> _goToInitialCameraPosition() async {
-    final GoogleMapController controller = await _googleMapController.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_position));
-  }
-}
-// }
+// //   void _addMarker(LatLng pos) {
+// //     //  if (_origin == null || (_origin != null && _destination != null)) {
+// //     setState(
+// //       () {
+// //         _origin = Marker(
+// //           markerId: const MarkerId('Origin'),
+// //           infoWindow: const InfoWindow(title: 'Origin'),
+// //           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+// //           position: pos,
+// //         );
+// //         //  _destination = null;
+// //       },
+// //     );
+// //     // } else {
+// //     setState(
+// //       () {
+// //         _origin = Marker(
+// //           markerId: const MarkerId('Destination'),
+// //           infoWindow: const InfoWindow(title: 'Destinaion'),
+// //           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+// //           position: pos,
+// //         );
+// //       },
+// //     );
+// //   }
+
+// //   Future<void> _goToInitialCameraPosition() async {
+// //     final GoogleMapController controller = await _googleMapController.future;
+// //     controller.animateCamera(CameraUpdate.newCameraPosition(_position));
+// //   }
+// // }
+// // // }
+// // // import 'dart:async';
+
+// // // import 'package:flutter/material.dart';
+// // // import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// // // class MapScreen extends StatefulWidget {
+// // //   @override
+// // //   State<MapScreen> createState() => MapScreenState();
+// // // }
+
+// // // class MapScreenState extends State<MapScreen> {
+// // //   Completer<GoogleMapController> _controller = Completer();
+
+// // //   static final CameraPosition _kGooglePlex = CameraPosition(
+// // //     target: LatLng(37.42796133580664, -122.085749655962),
+// // //     zoom: 14.4746,
+// // //   );
+
+// // //   static final CameraPosition _kLake = CameraPosition(
+// // //       bearing: 192.8334901395799,
+// // //       target: LatLng(37.43296265331129, -122.08832357078792),
+// // //       tilt: 59.440717697143555,
+// // //       zoom: 19.151926040649414);
+
+// // //   @override
+// // //   Widget build(BuildContext context) {
+// // //     return new Scaffold(
+// // //       body: GoogleMap(
+// // //         mapType: MapType.hybrid,
+// // //         initialCameraPosition: _kGooglePlex,
+// // //         onMapCreated: (GoogleMapController controller) {
+// // //           _controller.complete(controller);
+// // //         },
+// // //       ),
+// // //       floatingActionButton: FloatingActionButton.extended(
+// // //         onPressed: _goToTheLake,
+// // //         label: Text('To the lake!'),
+// // //         icon: Icon(Icons.directions_boat),
+// // //       ),
+// // //     );
+// // //   }
+
+// // //   Future<void> _goToTheLake() async {
+// // //     final GoogleMapController controller = await _controller.future;
+// // //     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+// // //   }
+// // // }
+
 // import 'dart:async';
 
 // import 'package:flutter/material.dart';
+// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:orilla_fresca_app/helpers/utils.dart';
+// import 'package:orilla_fresca_app/models/subcategory.dart';
+// import 'package:orilla_fresca_app/services/categoryselectionservice.dart';
+// import 'package:orilla_fresca_app/widgets/mainappbar.dart';
+// import 'package:orilla_fresca_app/widgets/mapbottompill.dart';
+// import 'package:orilla_fresca_app/widgets/mapuserbadge.dart';
+// import 'package:provider/provider.dart';
 
-// class MapScreen extends StatefulWidget {
+// const LatLng SOURCE_LOCATION = LatLng(42.7477863,-71.1699932);
+// const LatLng DEST_LOCATION = LatLng(42.744421,-71.1698939);
+// const double CAMERA_ZOOM = 16;
+// const double CAMERA_TILT = 80;
+// const double CAMERA_BEARING = 30;
+// const double PIN_VISIBLE_POSITION = 20;
+// const double PIN_INVISIBLE_POSITION = -220;
+
+// class MapPage extends StatefulWidget {
+  
+//   SubCategory subCategory;
+
 //   @override
-//   State<MapScreen> createState() => MapScreenState();
+//   _MapPageState createState() => _MapPageState();
 // }
 
-// class MapScreenState extends State<MapScreen> {
+// class _MapPageState extends State<MapPage> {
 //   Completer<GoogleMapController> _controller = Completer();
+//   BitmapDescriptor sourceIcon;
+//   BitmapDescriptor destinationIcon;
+//   Set<Marker> _markers = Set<Marker>();
+//   double pinPillPosition = PIN_VISIBLE_POSITION;
+//   LatLng currentLocation;
+//   LatLng destinationLocation;
+//   bool userBadgeSelected = false;
 
-//   static final CameraPosition _kGooglePlex = CameraPosition(
-//     target: LatLng(37.42796133580664, -122.085749655962),
-//     zoom: 14.4746,
-//   );
-
-//   static final CameraPosition _kLake = CameraPosition(
-//       bearing: 192.8334901395799,
-//       target: LatLng(37.43296265331129, -122.08832357078792),
-//       tilt: 59.440717697143555,
-//       zoom: 19.151926040649414);
+//   Set<Polyline> _polylines = Set<Polyline>();
+//   List<LatLng> polylineCoordinates = [];
+//   PolylinePoints polylinePoints;
 
 //   @override
-//   Widget build(BuildContext context) {
-//     return new Scaffold(
-//       body: GoogleMap(
-//         mapType: MapType.hybrid,
-//         initialCameraPosition: _kGooglePlex,
-//         onMapCreated: (GoogleMapController controller) {
-//           _controller.complete(controller);
-//         },
-//       ),
-//       floatingActionButton: FloatingActionButton.extended(
-//         onPressed: _goToTheLake,
-//         label: Text('To the lake!'),
-//         icon: Icon(Icons.directions_boat),
-//       ),
+//   void initState() {
+//     super.initState();
+
+//     polylinePoints = PolylinePoints();
+
+//     // set up initial locations
+//     this.setInitialLocation();
+//   }
+
+//   void setSourceAndDestinationMarkerIcons(BuildContext context) async {
+//     String parentCat = widget.subCategory.imgName.split("_")[0];
+
+//     sourceIcon = await BitmapDescriptor.fromAssetImage(
+//       ImageConfiguration(devicePixelRatio: 2.0),
+//       'assets/imgs/source_pin${Utils.deviceSuffix(context)}.png'
+//     );
+
+//     destinationIcon = await BitmapDescriptor.fromAssetImage(
+//       ImageConfiguration(devicePixelRatio: 2.0),
+//       'assets/imgs/destination_pin_${parentCat}${Utils.deviceSuffix(context)}.png'
 //     );
 //   }
 
-//   Future<void> _goToTheLake() async {
-//     final GoogleMapController controller = await _controller.future;
-//     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+//   void setInitialLocation() {
+//     currentLocation = LatLng(
+//       SOURCE_LOCATION.latitude,
+//       SOURCE_LOCATION.longitude
+//     );
+
+//     destinationLocation = LatLng(
+//       DEST_LOCATION.latitude,
+//       DEST_LOCATION.longitude
+//     );
+//   }
+
+
+
+// lection = Provider.of<CategorySelectionService>(context, listen: false);
+//     widget.subCategory = catSelection.selectedSubCategory;
+
+//     this.setSourceAndDestinationMarkerIcons(context);
+
+//     CameraPosition initialCameraPosition = CameraPosition(
+//       zoom: CAMERA_ZOOM,
+//       tilt: CAMERA_TILT,
+//       bearing: CAMERA_BEARING,
+//       target: SOURCE_LOCATION
+//     );
+
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           Positioned.fill(
+//             child: GoogleMap(
+//               myLocationEnabled: true,
+//               compassEnabled: false,
+//               tiltGesturesEnabled: false,
+//               polylines: _polylines,
+//               markers: _markers,
+//               mapType: MapType.normal,
+//               initialCameraPosition: initialCameraPosition,
+//               onTap: (LatLng loc) {
+//                 setState(() {
+//                   this.pinPillPosition = PIN_INVISIBLE_POSITION;
+//                   this.userBadgeSelected = false;
+//                 });
+//               },
+//               onMapCreated: (GoogleMapController controller) {
+//                 _controller.complete(controller);
+
+//                 showPinsOnMap();
+//                 setPolylines();
+//               },
+//             ),
+//           ),
+//           Positioned(
+//             top: 100,
+//             left: 0,
+//             right: 0,
+//             child: MapUserBadge(
+//               isSelected: this.userBadgeSelected,
+//             ),
+//           ),
+//           AnimatedPositioned(
+//             duration: const Duration(milliseconds: 500),
+//             curve: Curves.easeInOut,
+//             left: 0,
+//             right: 0,
+//             bottom: this.pinPillPosition,
+//             child: MapBottomPill()
+//           ),
+//           Positioned(
+//             top: 0,
+//             left: 0,
+//             right: 0,
+//             child: MainAppBar(
+//               showProfilePic: false,
+//             )
+//           )
+//         ],
+//       )
+//     );
+//   }
+
+//   void showPinsOnMap() {
+//     setState(() {
+//       _markers.add(Marker(
+//         markerId: MarkerId('sourcePin'),
+//         position: currentLocation,
+//         icon: sourceIcon,
+//         onTap: () {
+//           setState(() {
+//             this.userBadgeSelected = true;
+//           });
+//         }
+//       ));
+
+//       _markers.add(Marker(
+//         markerId: MarkerId('destinationPin'),
+//         position: destinationLocation,
+//         icon: destinationIcon,
+//         onTap: () {
+//           setState(() {
+//             this.pinPillPosition = PIN_VISIBLE_POSITION;
+//           });
+//         }
+//       ));
+//     });
+//   }
+
+//   void setPolylines() async {
+//     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+//       "<GOOGLE_MAPS_API_KEY_HERE>",
+//       PointLatLng(
+//         currentLocation.latitude,
+//         currentLocation.longitude
+//       ),
+//       PointLatLng(
+//         destinationLocation.latitude,
+//         destinationLocation.longitude
+//       )
+//     );
+
+//     if (result.status == 'OK') {
+//       result.points.forEach((PointLatLng point) {
+//         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+//       });
+
+//       setState(() {
+//         _polylines.add(
+//           Polyline(
+//             width: 10,
+//             polylineId: PolylineId('polyLine'),
+//             color: Color(0xFF08A5CB),
+//             points: polylineCoordinates
+//           )
+//         );
+//       });
+//     }
 //   }
 // }
+
+
+
+
+// AppBar(
+//         backgroundColor: Colors.green,
+//         centerTitle: false,
+//         title: const Text('Map Screen'),
+//         actions: [
+//           if (_origin.markerId != MarkerId(''))
+//             TextButton(
+//               onPressed: _goToInitialCameraPosition,
+//               // () => _googleMapController.animateCamera(
+//               //   CameraUpdate.newCameraPosition(
+//               //     CameraPosition(
+//               //         target: _origin.position, zoom: 14.5, tilt: 500),
+//               //   ),
+//               // ),
+//               style: TextButton.styleFrom(
+//                   primary: Colors.green,
+//                   textStyle: const TextStyle(fontWeight: FontWeight.w600)),
+//               child: const Text(
+//                 'ORIGIN',
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//             ),
+//           if (_origin.markerId != MarkerId(''))
+//             TextButton(
+//               onPressed: _goToInitialCameraPosition,
+//               // () => _googleMapController.animateCamera(
+//               //   CameraUpdate.newCameraPosition(
+//               //     CameraPosition(
+//               //         target: _origin.position, zoom: 14.5, tilt: 500),
+//               //   ),),
+
+//               style: TextButton.styleFrom(
+//                   primary: Colors.green,
+//                   textStyle: const TextStyle(fontWeight: FontWeight.w600)),
+//               child: const Text(
+//                 'DEST',
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//             ),
+//         ],
+//       ),
+
+
+
+//          //  {
+//           //   if (_origin.position != const LatLng(0.0, 0.0)) _origin,
+//           //   if (_destination.position != const LatLng(0.0, 0.0)) _destination,
+//           // },
+//           onLongPress: showPinsOnMap,
+//           //_addMarker,
+
+
+
+          
+//   // Future<void> _goToInitialCameraPosition() async {
+//   //   final GoogleMapController controller = await _googleMapController.future;
+//   //   controller.animateCamera(CameraUpdate.newCameraPosition(_position));
+//   // }
+
+//   // Future<void> _originCameraPostion() async {
+//   //   final GoogleMapController controller = await _googleMapController.future;
+//   //   controller.animateCamera(CameraUpdate.newCameraPosition(_position));
+//   // }
+
+
+//         floatingActionButton: FloatingActionButton(
+//         backgroundColor: Colors.green,
+//         foregroundColor: Colors.white,
+//         onPressed: _goToInitialCameraPosition,
+//         // _googleMapController.animateCamera(
+//         //   CameraUpdate.newCameraPosition(_initialCameraPosition),
+
+//         child: const Icon(Icons.center_focus_strong),
+//       ),
+
+//         // static const _initialCameraPosition = CameraPosition(
+//   //   target: LatLng(37.773972, -122.431297),
+//   //   zoom: 11.5,
+//   // );

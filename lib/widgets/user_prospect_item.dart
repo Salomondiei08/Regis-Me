@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mu_shop/providers/prospects.dart';
+import 'package:mu_shop/screens/edit_new_prospect_screnn.dart';
 import 'package:provider/provider.dart';
 
 class UserProspectItem extends StatelessWidget {
   final String name;
   final String imageUrl;
+  final String cardnumber;
 
-  UserProspectItem(this.name, this.imageUrl);
+  UserProspectItem(this.name, this.imageUrl, this.cardnumber);
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +25,24 @@ class UserProspectItem extends StatelessWidget {
           children: [
             IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () {},
+              onPressed: () {
+
+                 Navigator.of(context).pushNamed(EditNewProspect.routeName, arguments: cardnumber);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditNewProspect(),
+
+                  ),
+                );
+              },
               color: Theme.of(context).primaryColor,
             ),
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                Provider.of<Prospects>(context, listen: false).deleteProspect(name);
+                Provider.of<Prospects>(context, listen: false)
+                    .deleteProspect(name);
               },
               color: Theme.of(context).errorColor,
             )

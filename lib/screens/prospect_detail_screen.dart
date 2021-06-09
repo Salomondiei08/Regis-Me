@@ -13,11 +13,11 @@ class ProspectDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productCardNumber =
+    final prospectCardNumber =
         ModalRoute.of(context)!.settings.arguments as String;
 
     final loadedProspect = Provider.of<Prospects>(context, listen: false)
-        .findByCardNumber(productCardNumber);
+        .findByCardNumber(prospectCardNumber);
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedProspect.name),
@@ -65,7 +65,15 @@ class ProspectDetailScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return MapScreen();
+                          return MapScreen(
+                              cardNumber: loadedProspect.cardNumber,
+                              // contact: loadedProspect.contact,
+                              // email: loadedProspect.email,
+                              // name: loadedProspect.name,
+                              // longitude: loadedProspect.longitude,
+                              // latitude: loadedProspect.latitude,
+                              // imageUrl: loadedProspect.imageUrl
+                              );
                         },
                       ),
                     );

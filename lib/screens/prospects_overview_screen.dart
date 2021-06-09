@@ -14,7 +14,7 @@ enum FilterOptions { Favorites, All }
 class ProspectsOverviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final productsContainer = Provider.of<Prospects>(context, listen: false);
+    final prospectsContainer = Provider.of<Prospects>(context, listen: false);
     return Scaffold(
         // bottomNavigationBar: ConvexAppBar(
         //   items: [
@@ -41,9 +41,9 @@ class ProspectsOverviewScreen extends StatelessWidget {
               icon: Icon(Icons.more_vert),
               onSelected: (FilterOptions selectedValue) {
                 if (selectedValue == FilterOptions.Favorites) {
-                  productsContainer.showFavoriteOnly();
+                  prospectsContainer.showFavoriteOnly();
                 } else {
-                  productsContainer.showAll();
+                  prospectsContainer.showAll();
                 }
               },
             ),

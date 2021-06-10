@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mu_shop/screens/add_new_prospect_screen.dart';
 import 'package:mu_shop/screens/edit_new_prospect_screnn.dart';
@@ -13,7 +14,9 @@ import 'providers/prospects.dart';
 import '../screens/prospect_detail_screen.dart';
 // import '../screens/prospects_overview_screen.dart';
 
-void main() {
+Future<void> main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

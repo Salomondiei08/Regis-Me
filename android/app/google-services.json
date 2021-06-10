@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1097850605609",
+    "project_id": "regisme-7cee1",
+    "storage_bucket": "regisme-7cee1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097850605609:android:af4d4191ff59d9f58a0c38",
+        "android_client_info": {
+          "package_name": "com.example.mu_shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1097850605609-23gose3ijmadss6ne8v4d4aqrogehu2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mu_shop",
+            "certificate_hash": "4a5b99d972e22a1f3e012b7ace66f7237cbed68b"
+          }
+        },
+        {
+          "client_id": "1097850605609-jml5m5ac986oludu7p4a81dfrj2nfe42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZBmYt0Sp4sQRR0ZiPtrj3zO5Nwl8OjLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1097850605609-jml5m5ac986oludu7p4a81dfrj2nfe42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

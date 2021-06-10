@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:mu_shop/models/list_page.dart';
+import 'package:mu_shop/screens/login/login_page.dart';
+import 'login/services/authservice.dart';
 import 'navigation_bar.dart';
 
 class FirstScreen extends StatelessWidget {
@@ -16,7 +18,7 @@ class FirstScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return MyCustomBottomNavigationBar();
+                return AuthService().handleAuth();
               },
             ),
           );
@@ -26,7 +28,7 @@ class FirstScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return MyCustomBottomNavigationBar();
+                return AuthService().handleAuth();
               },
             ),
           );

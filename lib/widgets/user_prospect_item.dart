@@ -26,15 +26,16 @@ class UserProspectItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
+                Navigator.of(context).pushNamed(EditNewProspect.routeName,
+                    arguments: cardnumber);
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => EditNewProspect(),
 
-                 Navigator.of(context).pushNamed(EditNewProspect.routeName, arguments: cardnumber);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditNewProspect(),
+                //),
 
-                  ),
-                );
+                //);
               },
               color: Theme.of(context).primaryColor,
             ),

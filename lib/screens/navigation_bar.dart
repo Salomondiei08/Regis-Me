@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mu_shop/screens/prospects_overview_screen.dart';
+import 'package:mu_shop/screens/search_page_screen.dart';
 import 'package:mu_shop/screens/search_prospect_screen.dart';
+import 'search_page_screen.dart';
 
 import 'account_settings_screen.dart';
 import 'add_new_prospect_screen.dart';
@@ -28,7 +30,7 @@ class MyCustomBottomNavigationBarState
   void initState() {
     _pages = [
       {"page": ProspectsOverviewScreen()},
-      {"page": SearchScreen()},
+      {"page": SearchListWidget()},
       {"page": AddNewProspect()},
       {"page": ModifyScreen()},
       {"page": AccountSettingScreen()}

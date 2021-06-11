@@ -14,22 +14,16 @@ class FirstScreen extends StatelessWidget {
       body: IntroductionScreen(
         pages: getPage(),
         onDone: () {
-          Navigator.push(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) {
-                return AuthService().handleAuth();
-              },
+              builder: (context) => AuthService().handleAuth(),
             ),
           );
         },
         onSkip: () {
-          Navigator.push(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) {
-                return AuthService().handleAuth();
-              },
+              builder: (context) => LoginPage(),
             ),
           );
           // You can also override onSkip callback

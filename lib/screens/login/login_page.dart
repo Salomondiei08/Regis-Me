@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(height: 20.0),
           GestureDetector(
             onTap: () {
-              // AuthService().fbSignIn();
+               AuthService().fbSignIn();
             },
             child: Container(
               height: 50.0,
@@ -190,14 +190,14 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Center(
                       child: Image(
-                        image: AssetImage('assets/regisme.png'),
+                        image: AssetImage('assets/facebook.png'),
                       ),
                       // size: 15.0),
                     ),
                     SizedBox(width: 10.0),
                     Center(
                       child: Text(
-                        'Login with Google',
+                        'Login with Facebook',
                         style: TextStyle(fontFamily: 'Trueno'),
                       ),
                     ),

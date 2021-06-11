@@ -4,8 +4,6 @@ import 'package:mu_shop/providers/prospect.dart';
 import 'package:mu_shop/screens/add_new_prospect_screen.dart';
 
 class Prospects with ChangeNotifier {
-
-  
   List<Prospect> _items = [
     Prospect(
       cardNumber: '000000',
@@ -89,11 +87,42 @@ class Prospects with ChangeNotifier {
     return _items.firstWhere((pros) => pros.cardNumber == cardNumber);
   }
 
+  //   filterSearch(String query) {
+  //   List<Prospect> searchList = [];
+  //   searchList.addAll(items);
+  //   if (query.isNotEmpty) {
+  //     List<Prospect> resultListData = [];
+  //     searchList.forEach((item) {
+  //       if (item.contains(query)) {
+  //         resultListData.add(item);
+  //       }
+  //     });
+  //     // setState(() {
+  //       showItemList.clear();
+  //       showItemList.addAll(resultListData);
+  //     // });
+  //     return;
+  //   } else {
+  //     // setState(() {
+  //       showItemList.clear();
+  //       showItemList.addAll(items);
+  //     // });
+  //   }
+  // }
+
   List<Prospect> searchItems(String name) {
-    if (name.isNotEmpty) {
-      return _items
-          .where((prosItem) => prosItem.name.startsWith(name))
-          .toList();
+    if ((name.isNotEmpty) && (name != "")) {
+      print('Tout a été retourné');
+      print('la variable = $name');
+      print(
+          'la longueur de la liste est : ${_items.where((prosItem) => prosItem.name.toLowerCase().startsWith(name.toLowerCase())).toList().length}');
+      // print('$_items');
+      return [
+        ..._items
+            .where((prosItem) =>
+                prosItem.name.toLowerCase().startsWith(name.toLowerCase()))
+            .toList()
+      ];
     }
     return [..._items];
   }

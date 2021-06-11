@@ -43,7 +43,8 @@ class ProspectItem extends StatelessWidget {
                     duration: Duration(seconds: 3),
                     action: SnackBarAction(
                       label: 'UNDO',
-                      onPressed: () {},
+                      onPressed: () {
+                      },
                     ),
                   ),
                 );

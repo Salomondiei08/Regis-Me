@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mu_shop/screens/account_settings_screen.dart';
 import 'package:mu_shop/screens/modify_screen.dart';
 import 'package:mu_shop/screens/prospects_overview_screen.dart';
+import 'package:mu_shop/screens/search_page_screen.dart';
 import 'package:mu_shop/screens/search_prospect_screen.dart';
 
 import 'add_new_prospect_screen.dart';
@@ -26,7 +27,7 @@ class _NavigationState extends State<Navigation> {
   void initState() {
     _pages = [
       {"page": ProspectsOverviewScreen()},
-      {"page": SearchScreen()},
+      {"page": SearchListWidget()},
       {"page": AddNewProspect()},
       {"page": ModifyScreen()},
       {"page": AccountSettingScreen()}

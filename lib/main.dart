@@ -2,17 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mu_shop/screens/add_new_prospect_screen.dart';
 import 'package:mu_shop/screens/edit_new_prospect_screnn.dart';
-import 'package:mu_shop/screens/intro_screen.dart';
 import 'package:mu_shop/screens/modify_screen.dart';
-import 'package:mu_shop/screens/navigation.dart';
 import 'package:mu_shop/screens/splashscreen.dart';
-// import 'package:mu_shop/screens/prospects_overview_screen.dart';
 import 'package:provider/provider.dart';
-// import 'providers/prospect.dart';
 import 'providers/prospects.dart';
-
 import '../screens/prospect_detail_screen.dart';
-// import '../screens/prospects_overview_screen.dart';
+
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();

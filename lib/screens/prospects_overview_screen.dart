@@ -1,13 +1,11 @@
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:mu_shop/providers/prospect.dart';
 import 'package:mu_shop/providers/prospects.dart';
 import 'package:mu_shop/widgets/prospect_grid.dart';
 import 'package:provider/provider.dart';
 import '../providers/prospects.dart';
 
 import '../widgets/prospect_grid.dart';
-import 'navigation.dart';
+
 
 enum FilterOptions { Favorites, All }
 

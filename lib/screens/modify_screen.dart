@@ -17,11 +17,15 @@ class ModifyScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(8),
         child: ListView.builder(
+          shrinkWrap: true,
           itemCount: prospectsData.items.length,
           itemBuilder: (_, i) => Column(
             children: [
               UserProspectItem(
-                  prospectsData.items[i].name, prospectsData.items[i].imageUrl, prospectsData.items[i].cardNumber,),
+                prospectsData.items[i].name,
+                prospectsData.items[i].imageUrl,
+                prospectsData.items[i].cardNumber,
+              ),
               Divider()
             ],
           ),

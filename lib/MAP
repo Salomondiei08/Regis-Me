@@ -1,0 +1,226 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:async';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+
+const LatLng SOURCE_LOCATION = LatLng(5.345317, -4.024429);
+const LatLng DEST_LOCATION = LatLng(5.335317, -4.044429);
+const double CAMERA_ZOOM = 16;
+const double CAMERA_TILT = 80;
+const double CAMERA_BEARING = 30;
+const double PIN_VISIBLE_POSITION = 20;
+const double PIN_INVISIBLE_POSITION = -220;
+bool userBadgeSelected = false;
+
+class MapScreen extends StatefulWidget {
+  // final String name;
+  final String cardNumber;
+
+  // final String imageUrl;
+  // final String email;
+  // final String contact;
+  // final double longitude;
+  // final double latitude;
+
+  MapScreen(
+      {
+      // required this.name,
+      // required this.imageUrl,
+      // required this.email,
+      // required this.contact,
+      // required this.longitude,
+      // required this.latitude,
+      required this.cardNumber});
+
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  double pinPillPosition = PIN_VISIBLE_POSITION;
+  Completer<GoogleMapController> _googleMapController = Completer();
+
+  Set<Marker> _markers = Set<Marker>();
+  LatLng currentLocation = LatLng(5.345317, -4.024429);
+  LatLng destinationLocation = LatLng(5.335317, -4.044429);
+
+  Set<Polyline> _polylines = Set<Polyline>();
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+
+  LatLng coordonees = LatLng(0, 0);
+
+  void setInitialLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    coordonees = LatLng(position.latitude, position.longitude);
+    currentLocation = LatLng(position.latitude, position.longitude);
+    destinationLocation =
+        LatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude);
+  }
+
+  @override
+  void initState() {
+    polylinePoints = PolylinePoints();
+    // this.setInitialLocation();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    CameraPosition initialCameraPosition = CameraPosition(
+      zoom: CAMERA_ZOOM,
+      tilt: CAMERA_TILT,
+      bearing: CAMERA_BEARING,
+      target: LatLng(coordonees.latitude, coordonees.longitude),
+    );
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: GoogleMap(
+              myLocationEnabled: true,
+              // mapType: MapType.normal,
+              compassEnabled: false,
+              polylines: _polylines,
+              tiltGesturesEnabled: false,
+              myLocationButtonEnabled: false,
+              zoomControlsEnabled: false,
+              initialCameraPosition: initialCameraPosition,
+              onMapCreated: (GoogleMapController controller) {
+                _googleMapController.complete(controller);
+                // showPinsOnMap();
+                // setPolylines();
+              },
+              onTap: (
+                LatLng loc
+                ) {
+                // setState(
+                //   () {
+                //     this.pinPillPosition = PIN_INVISIBLE_POSITION;
+                //     userBadgeSelected = false;
+                //   },
+                // );
+              },
+              markers: _markers,
+            ),
+          ),
+          // Positioned(
+          //   top: 60,
+          //   left: 0,
+          //   right: 0,
+          //   child: UserMap(userBadgeSelected),
+          // ),
+          // AnimatedPositioned(
+          //     duration: const Duration(milliseconds: 500),
+          //     curve: Curves.easeInOut,
+          //     right: 0,
+          //     left: 0,
+          //     bottom: 10,
+          //     child: Container()
+          //     // ProspectMap(
+          //     //   cardNumber: widget.cardNumber,
+          //     // ),
+          //     //ProspectMap(name: name, email: , contact: con, imageUrl: ,),
+          //     ),
+        ],
+      ),
+    );
+  }
+
+  void setPolylines() async {
+    //PolylineResult result =
+    await polylinePoints
+        .getRouteBetweenCoordinates(
+      'AIzaSyAsUETIm-SkE_k9qiw7H7A4YQXGbG0iBXU',
+      PointLatLng(SOURCE_LOCATION.latitude, SOURCE_LOCATION.longitude),
+      PointLatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude),
+      travelMode: TravelMode.driving,
+    )
+        .then((value) {
+      value.points.forEach(
+        (PointLatLng point) {
+          polylineCoordinates.add(
+            LatLng(point.latitude, point.longitude),
+          );
+        },
+      );
+    }).then((value) {
+      _polylines.add(
+        Polyline(
+            visible: true,
+            polylineId: PolylineId('PolyLine'),
+            width: 10,
+            color: Colors.red,
+            points: polylineCoordinates),
+      );
+      setState(
+        () {},
+      );
+    });
+
+    // print('Les résulatats sont ${result.status}');
+
+    // if (result.points.isNotEmpty) {
+    //   result.points.forEach(
+    //     (PointLatLng point) {
+    //       polylineCoordinates.add(
+    //         LatLng(point.latitude, point.longitude),
+    //       );
+    //     },
+    //   );
+    //    _polylines.add(
+    //         Polyline(
+    //             visible: true,
+    //             polylineId: PolylineId('PolyLine'),
+    //             width: 10,
+    //             color: Colors.red,
+    //             points: polylineCoordinates),
+    //       );
+    //   setState(
+    //     () {
+
+    //     },
+    //   );
+    // }
+  }
+
+  void showPinsOnMap() {
+    setState(
+      () {
+        _markers.add(
+          Marker(
+            markerId: MarkerId('SourcePin'),
+            position: currentLocation,
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueGreen),
+            onTap: () {
+              setState(
+                () {
+                  userBadgeSelected = true;
+                },
+              );
+            },
+          ),
+        );
+        _markers.add(
+          Marker(
+            markerId: MarkerId('DestinationPin'),
+            position: destinationLocation,
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            onTap: () {
+              setState(
+                () {
+                  this.pinPillPosition = PIN_VISIBLE_POSITION;
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}

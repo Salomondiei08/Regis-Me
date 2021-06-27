@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mu_shop/providers/prospect.dart';
 import 'package:mu_shop/providers/prospects.dart';
 import 'package:mu_shop/screens/map_screen.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +65,7 @@ class ProspectDetailScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return MapScreen(
-                              cardNumber: loadedProspect.cardNumber,
+                              // cardNumber: loadedProspect.cardNumber,
                               // contact: loadedProspect.contact,
                               // email: loadedProspect.email,
                               // name: loadedProspect.name,

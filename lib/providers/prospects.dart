@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:mu_shop/providers/prospect.dart';
-import 'package:mu_shop/screens/add_new_prospect_screen.dart';
 
 class Prospects with ChangeNotifier {
   List<Prospect> _items = [
@@ -78,9 +77,10 @@ class Prospects with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteProspect(String cardNumber) {
-    _items.removeWhere((pros) => pros.cardNumber == cardNumber);
+  void deleteProspect(String name) {
+    _items.removeWhere((pros) => pros.name == name);
     notifyListeners();
+    print(name);
   }
 
   Prospect findById(String cardNumber) {
@@ -112,11 +112,6 @@ class Prospects with ChangeNotifier {
 
   List<Prospect> searchItems(String name) {
     if ((name.isNotEmpty) && (name != "")) {
-      print('Tout a été retourné');
-      print('la variable = $name');
-      print(
-          'la longueur de la liste est : ${_items.where((prosItem) => prosItem.name.toLowerCase().startsWith(name.toLowerCase())).toList().length}');
-      // print('$_items');
       return [
         ..._items
             .where((prosItem) =>

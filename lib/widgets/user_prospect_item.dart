@@ -28,14 +28,6 @@ class UserProspectItem extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pushNamed(EditNewProspect.routeName,
                     arguments: cardnumber);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EditNewProspect(),
-
-                //),
-
-                //);
               },
               color: Theme.of(context).primaryColor,
             ),

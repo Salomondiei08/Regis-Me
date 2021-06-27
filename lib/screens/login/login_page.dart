@@ -148,7 +148,6 @@ class _LoginPageState extends State<LoginPage> {
             onTap: () {
               {
                 if (checkFields()) print(email);
-                print(password);
                 AuthService().signIn(email, password, context);
               }
             },

@@ -37,7 +37,7 @@ class ProspectItem extends StatelessWidget {
               icon: Icon(prospect.isFavorite ? Icons.star : Icons.star_border),
               onPressed: () {
                 prospect.toggleFavoriteStatus();
-                Scaffold.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Company added to favorite'),
                     duration: Duration(seconds: 3),

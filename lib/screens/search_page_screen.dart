@@ -57,7 +57,7 @@ class _SearchListWidgetState extends State<SearchListWidget> {
               },
             );
           },
-          textController: textEditingController,
+          textController: textEditingController, onSubmitted: (val ) {  },
         ),
       ),
       body: ClipRRect(

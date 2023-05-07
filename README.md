@@ -1,5 +1,4 @@
-# mu_shop
-
+# Regis Me
 A new Flutter project.
 
 ## Getting Started
